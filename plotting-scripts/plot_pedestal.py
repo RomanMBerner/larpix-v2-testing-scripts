@@ -47,6 +47,7 @@ def plot_adc_dist(data, channel, name=None):
     plt.hist(data[channel]['adc'], bins=range(0,256), histtype='step')
     plt.xlabel('ADC')
     plt.ylabel('trigger count')
+    plt.savefig('adc_dist.png')
 
 def plot_time_series(data, channel, name=None):
     if name is None:
@@ -56,6 +57,7 @@ def plot_time_series(data, channel, name=None):
     plt.plot(data[channel]['timestamp'], data[channel]['adc'])
     plt.xlabel('timestamp')
     plt.ylabel('ADC')
+    plt.savefig('time_series.png')
 
 def fit_adc_dist(data, channel, name=None):
     vals = np.array(data[channel]['adc'])
@@ -65,6 +67,7 @@ def fit_adc_dist(data, channel, name=None):
     plot_adc_dist(data, channel, name=name)
     peak = np.sum(vals == mode(vals)[0][0])
     plt.plot(x+0.5, peak * np.exp(-0.5*(x-mean)**2/sig**2), '--', label='fit')
+    plt.savefig('fit_adc_dist.png')
 
 def plot_adc_mean(data, bins=None):
     plt.figure('mean adc')
@@ -75,6 +78,7 @@ def plot_adc_mean(data, bins=None):
     plt.hist(x, bins=bins, histtype='step')
     plt.xlabel('mean ADC')
     plt.ylabel('channel count')
+    plt.savefig('adc_mean.png')
 
 def plot_adc_std(data, bins=None):
     plt.figure('std adc')
@@ -85,12 +89,14 @@ def plot_adc_std(data, bins=None):
     plt.hist([data[channel]['std'] for channel in data.keys()], bins=bins, histtype='step')
     plt.xlabel('std dev ADC')
     plt.ylabel('channel count')
+    plt.savefig('adc_std.png')
 
 def scatter_adc_std_mean(data):
     plt.figure('scatter adc mean/std')
     plt.scatter([data[channel]['mean'] for channel in data.keys()], [data[channel]['std'] for channel in data.keys()],1)
     plt.xlabel('mean ADC')
     plt.ylabel('std dev ADC')
+    plt.savefig('adc_std_mean.png')
 
 def plot_summary(data):
     plot_exists = plt.fignum_exists('summary')
@@ -114,6 +120,7 @@ def plot_summary(data):
         ax2 = axes[0].secondary_xaxis('top', functions=(lambda x: x, lambda x: x))
         ax2.xaxis.set_major_formatter(ticker.FuncFormatter(_unique2key))
         ax2.set(xlabel='channel key')
+    plt.savefig('summary.png')
 
 def unique_channel_id(io_group, io_channel, chip_id, channel_id):
     return channel_id + 64*(chip_id + 256*(io_channel + 256*(io_group)))
